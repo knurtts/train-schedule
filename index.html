@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/5.5.8/firebase.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+    <title>Train Schedule</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card text-white bg-dark mb-3">
+            <div class="card-body" id="page-title">
+                <h1 class="card-title">Watch out, kids.</h1><Br>
+                <p class="card-text">This firebase train's got no breaks.</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <b>Current Train Schedule</b>
+            </div>
+            <div class="card-body" id="full-train-list">
+                <div class="row items">
+                    <div class="col-md-2"><strong>Train Name</strong></div>
+                    <div class="col-md-2"><strong>Destination</strong></div>
+                    <div class="col-md-2"><strong>Frequency (mins)</strong></div>
+                    <div class="col-md-2"><strong>Next Arrival</strong></div>
+                    <div class="col-md-2"><strong>Minutes Away</strong></div>
+                </div><hr>
+            </div>
+        </div>
+        <br>
+        <div class="card">
+            <div class="card-header">
+                <b>Add Train</b>
+            </div>
+            <div class="card-body" id="addTrain">
+            <form>
+                <div class="form-group">
+                    <label for="trainName">Train Name</label>
+                    <input type="text" class="form-control" id="trainName" placeholder="The Polar Express">
+                </div>
+                <div class="form-group">
+                    <label for="trainDestination">Destination</label>
+                    <input type="text" class="form-control" id="trainDestination" placeholder="Uncanny Valley">
+                </div>
+                <div class="form-group">
+                    <label for="trainFreq">Frequency (mins)</label>
+                    <input type="text" class="form-control" id="trainFreq" placeholder="15">
+                </div>
+                <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+            </form>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="logic.js"></script>
+
+</html>
