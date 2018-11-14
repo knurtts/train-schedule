@@ -13,7 +13,7 @@
   var database = firebase.database();
 
   var trainName = "";
-  var frequency;
+  var frequency = "";
   var destination = "";
 
   $("#submit").on("click", function (event) {
@@ -23,15 +23,17 @@
     frequency = $("#trainFreq").val().trim();
     destination = $("#trainDestination").val().trim();
 
-    database.ref("/trains").push({ //this could be added to the DB as an object instead of this
+    database.ref("/trains").push({ 
         train: trainName,
         frequency: frequency,
         destination: destination
-    });
+    }, (data) => {
+        
+            $("#trainName").val("");
+            $("#trainFreq").val("");
+            $("#trainDestination").val("");
 
-    $("#trainName").val("");
-    $("#trainFreq").val("");
-    $("#trainDestination").val("");
+    });
 });
 
 database.ref("/trains").on("child_added", function(childSnapshot) {
@@ -39,33 +41,33 @@ database.ref("/trains").on("child_added", function(childSnapshot) {
     console.log(snapVal.train);
     console.log("FREQUENCY: " + snapVal.frequency);
     console.log(snapVal.destination);
+
+    var currentTime = moment().format("hh:mm");
+    console.log("CURRENT TIME: " + moment(currentTime));
     
     var time = "12:00";
-    var startTime = moment(time, "HH:mm").subtract(1, "days");
-    console.log("start time: " + startTime);
 
-    var currentTime = moment();
-    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+    var startTime = moment(time, "hh:mm").subtract(1, "days");
+    console.log("start time: " + startTime);
     
     var difference = parseInt(moment().diff(startTime, "minutes"));
     console.log("DIFFERENCE: " + difference);
     
-    var remainder = difference % frequency; 
-    console.log("REMAINDER:" + parseInt(remainder)); //why isn't this a number??
+    var remainder = difference % snapVal.frequency;
+    console.log("REMAINDER:" + remainder);
     
-    // var minutesTil = frequency - remainder;
-    // console.log("minutes til: " + minutesTil);
+    var minutesTil = snapVal.frequency - remainder;
+    console.log("minutes til: " + minutesTil);
     
-    // var nextTrain = moment().add(minutesTil, "minutes");
-    // console.log("next: " + nextTrain);
+    var nextTrain = moment().add(minutesTil, "minutes");
+    console.log("next: " + moment(nextTrain).format("hh:mm"));
     
+    $("#full-train-list").append(
+        "<div class='row'><div class='col-md-2'>" + snapVal.train + "</div>"
+        + "<div class='col-md-2'>" + snapVal.destination + "</div>"
+        + "<div class='col-md-2'>" + snapVal.frequency + "</div>"
+        + "<div class='col-md-2'>" + moment(nextTrain).format("hh:mm a") + "</div>"
+        + "<div class='col-md-2'>" + minutesTil + "</div></div><hr>"
 
-    // $("#full-train-list").append(
-    //     "<div class='row'><div class='col-md-2'>" + snapVal.train + "</div>"
-    //     + "<div class='col-md-2'>" + snapVal.destination + "</div>"
-    //     + "<div class='col-md-2'>" + snapVal.frequency + "</div>"
-    //     + "<div class='col-md-2'>" + "Sometime..." + "</div>"
-    //     + "<div class='col-md-2'>" + nextTrain + "</div></div><hr>"
-
-    // )
+    );
 });
