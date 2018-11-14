@@ -13,7 +13,7 @@
   var database = firebase.database();
 
   var trainName = "";
-  var frequency = "";
+  var frequency;
   var destination = "";
 
   $("#submit").on("click", function (event) {
@@ -37,32 +37,35 @@
 database.ref("/trains").on("child_added", function(childSnapshot) {
     snapVal = childSnapshot.val();
     console.log(snapVal.train);
-    console.log(snapVal.frequency);
+    console.log("FREQUENCY: " + snapVal.frequency);
     console.log(snapVal.destination);
     
     var time = "12:00";
-    var startTime = moment(time, "hh:mm").subtract(1, "years");
+    var startTime = moment(time, "HH:mm").subtract(1, "days");
     console.log("start time: " + startTime);
+
+    var currentTime = moment();
+    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
     
-    var difference = moment().diff(moment(startTime).format("hh:mm"));
-    console.log("difference: " + difference);
+    var difference = parseInt(moment().diff(startTime, "minutes"));
+    console.log("DIFFERENCE: " + difference);
     
-    var remainder = difference % frequency;
-    console.log("remainder:" + remainder);
+    var remainder = difference % frequency; 
+    console.log("REMAINDER:" + parseInt(remainder)); //why isn't this a number??
     
-    var minutesTil = frequency - remainder;
-    console.log("minutes til: " + minutesTil);
+    // var minutesTil = frequency - remainder;
+    // console.log("minutes til: " + minutesTil);
     
-    var nextTrain = moment().add(minutesTil, "minutes");
-    console.log("next: " + nextTrain);
+    // var nextTrain = moment().add(minutesTil, "minutes");
+    // console.log("next: " + nextTrain);
     
 
-    $("#full-train-list").append(
-        "<div class='row'><div class='col-md-2'>" + snapVal.train + "</div>"
-        + "<div class='col-md-2'>" + snapVal.destination + "</div>"
-        + "<div class='col-md-2'>" + snapVal.frequency + "</div>"
-        + "<div class='col-md-2'>" + "Sometime..." + "</div>"
-        + "<div class='col-md-2'>" + nextTrain + "</div></div><hr>"
+    // $("#full-train-list").append(
+    //     "<div class='row'><div class='col-md-2'>" + snapVal.train + "</div>"
+    //     + "<div class='col-md-2'>" + snapVal.destination + "</div>"
+    //     + "<div class='col-md-2'>" + snapVal.frequency + "</div>"
+    //     + "<div class='col-md-2'>" + "Sometime..." + "</div>"
+    //     + "<div class='col-md-2'>" + nextTrain + "</div></div><hr>"
 
-    )
+    // )
 });
