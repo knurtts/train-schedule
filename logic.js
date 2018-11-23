@@ -38,36 +38,55 @@
 
 database.ref("/trains").on("child_added", function(childSnapshot) {
     snapVal = childSnapshot.val();
-    console.log(snapVal.train);
-    console.log("FREQUENCY: " + snapVal.frequency);
-    console.log(snapVal.destination);
-
+    // console.log(snapVal.train);
+    // console.log("FREQUENCY: " + snapVal.frequency);
+    // console.log(snapVal.destination);
     var currentTime = moment().format("hh:mm");
-    console.log("CURRENT TIME: " + moment(currentTime));
-    
+    // console.log("CURRENT TIME: " + moment(currentTime));
     var time = "12:00";
-
     var startTime = moment(time, "hh:mm").subtract(1, "days");
-    console.log("start time: " + startTime);
-    
+    // console.log("start time: " + startTime);
     var difference = parseInt(moment().diff(startTime, "minutes"));
-    console.log("DIFFERENCE: " + difference);
-    
+    // console.log("DIFFERENCE: " + difference);
     var remainder = difference % snapVal.frequency;
-    console.log("REMAINDER:" + remainder);
-    
+    // console.log("REMAINDER:" + remainder);
     var minutesTil = snapVal.frequency - remainder;
-    console.log("minutes til: " + minutesTil);
-    
+    // console.log("minutes til: " + minutesTil);
     var nextTrain = moment().add(minutesTil, "minutes");
-    console.log("next: " + moment(nextTrain).format("hh:mm"));
+    // console.log("next: " + moment(nextTrain).format("hh:mm"));
     
     $("#full-train-list").append(
         "<div class='row'><div class='col-md-2'>" + snapVal.train + "</div>"
         + "<div class='col-md-2'>" + snapVal.destination + "</div>"
         + "<div class='col-md-2'>" + snapVal.frequency + "</div>"
         + "<div class='col-md-2'>" + moment(nextTrain).format("hh:mm a") + "</div>"
-        + "<div class='col-md-2'>" + minutesTil + "</div></div><hr>"
-
+        + "<div class='col-md-2 next-updated'>" + minutesTil + "</div>" 
+        //+ '<div class="col-md-2"><button type="button" class="btn btn-secondary" id="update">Update Time</button></div>' 
+        + '</div><hr>'
     );
+
 });
+
+// setInterval(function(snapshot){
+//     database.ref("/trains").on("child_added", function(snapshot){
+//         // The following is a feeble attempt to update the Minutes Away collumn
+//         var time = "12:00";
+//         var startTime = moment(time, "hh:mm").subtract(1, "days");
+//         // console.log("start time: " + startTime);
+//         var difference = parseInt(moment().diff(startTime, "minutes"));
+//         // console.log("DIFFERENCE: " + difference);
+//         var remainder = difference % snapshot.frequency;
+//         // console.log("REMAINDER:" + remainder);
+//         var minutesTil = snapshot.frequency - remainder;
+//             $(".next-updated").html(minutesTil);
+//             console.log(parseInt(minutesTil) + ":" + snapshot.val().train);
+//     });     
+// }, 6000);
+
+// $(document).on("click", "#update", function(){
+//     console.log("Update!");    
+// });
+
+// $(document).on("click", "#remove", function(){
+//     console.log("Remove!");    
+// });
