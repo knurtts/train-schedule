@@ -15,6 +15,7 @@
   var trainName = "";
   var frequency = "";
   var destination = "";
+  var time = "12:00";
 
   $("#submit").on("click", function (event) {
     event.preventDefault();
@@ -22,17 +23,19 @@
     trainName = $("#trainName").val().trim();
     frequency = $("#trainFreq").val().trim();
     destination = $("#trainDestination").val().trim();
+    time = $("#trainStart").val().trim();
 
     database.ref("/trains").push({ 
         train: trainName,
         frequency: frequency,
-        destination: destination
+        destination: destination,
+        start: time
     }, (data) => {
         
             $("#trainName").val("");
             $("#trainFreq").val("");
             $("#trainDestination").val("");
-
+            $("#trainStart").val("");
     });
 });
 
@@ -43,8 +46,8 @@ database.ref("/trains").on("child_added", function(childSnapshot) {
     // console.log(snapVal.destination);
     var currentTime = moment().format("hh:mm");
     // console.log("CURRENT TIME: " + moment(currentTime));
-    var time = "12:00";
-    var startTime = moment(time, "hh:mm").subtract(1, "days");
+    // var time = "12:00";
+    var startTime = moment(snapVal.start, "hh:mm").subtract(1, "days");
     // console.log("start time: " + startTime);
     var difference = parseInt(moment().diff(startTime, "minutes"));
     // console.log("DIFFERENCE: " + difference);
